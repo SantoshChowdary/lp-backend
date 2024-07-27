@@ -1,0 +1,12 @@
+
+POST http://localhost:3000/auth/v1/login/9866021292
+
+###
+
+POST http://localhost:3000/auth/v1/verify
+Content-Type: application/json
+
+{
+    "mobileNumber" : "9866021291",
+    "password" : "santosh9491"
+}
