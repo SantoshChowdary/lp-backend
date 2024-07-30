@@ -1,5 +1,5 @@
 
-POST http://localhost:3000/auth/v1/login/9866021292
+POST http://localhost:3000/auth/v1/login/9866021291
 
 ###
 
@@ -9,4 +9,16 @@ Content-Type: application/json
 {
     "mobileNumber" : "9866021291",
     "password" : "santosh9491"
+}
+
+###
+
+POST http://localhost:3000/auth/v1/signup
+Content-Type: application/json
+
+{
+    "name" : "santosh", 
+    "mobileNumber" : "8500808498", 
+    "email" : "ssk28412@gmail.com", 
+    "password" : "12345"
 }

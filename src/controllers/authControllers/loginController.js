@@ -1,5 +1,7 @@
 const loginService = require("../../services/authService/loginService");
-const constants = require("../../common/constants")
+const constants = require("../../common/constants");
+const { v4: uuidV4 } = require('uuid');
+
 
 const loginController = async (req, res) => {
     const {mobileNumber} = req.params;
@@ -48,8 +50,37 @@ const verifyPasswordController = async (req, res) => {
     }
 }
 
+const signupController = async (req, res) => {
+    const {name, mobileNumber, email, password} = req.body;
+
+    try{
+        const result = await loginService.verifyLoginMobileNumber(mobileNumber);
+        if (result === constants.responseStrings.INVALID_USER){
+            const newUserId = uuidV4();
+            const isUserAdded = await loginService.addNewUserToDBService({
+                newUserId, name, mobileNumber, email, password
+            });
+            if (isUserAdded){
+                return res.status(201).send(newUserId);
+            } else {
+                return res.status(500).send(constants.responseStrings.DATABASE_ERROR)
+            }
+        } else if (result === constants.responseStrings.DATABASE_ERROR){
+            return res.status(500).send(result)
+        } else {
+            return res.status(400).send(constants.responseStrings.EXISTING_USER);
+        }
+
+    } catch (err){
+        console.log(err)
+        return res.status(500).send(constants.responseStrings.SERVER_ERROR)
+    }
+
+}
+
 
 module.exports = {
     loginController,
-    verifyPasswordController
+    verifyPasswordController,
+    signupController
 }

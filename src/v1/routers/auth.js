@@ -1,5 +1,5 @@
 const express = require('express');
-const {loginController, verifyPasswordController} = require('../../controllers/authControllers/loginController')
+const {loginController, verifyPasswordController, signupController} = require('../../controllers/authControllers/loginController')
 const db = require("../../database/dbConnection");
 
 const authRouterV1 = express.Router();
@@ -9,7 +9,10 @@ const authRouterV1 = express.Router();
 authRouterV1.post('/login/:mobileNumber', loginController);
 
 //verify password
-authRouterV1.post('/verify', verifyPasswordController)
+authRouterV1.post('/verify', verifyPasswordController);
+
+// signup
+authRouterV1.post('/signup', signupController)
 
 
 

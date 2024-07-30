@@ -1,4 +1,4 @@
-const {getUserByMobileNumber} = require("../../models/authModel/loginModel");
+const {getUserByMobileNumber, addNewUserToDB} = require("../../models/authModel/loginModel");
 const constants = require("../../common/constants")
 
 const verifyLoginMobileNumber = async (mobileNumber) => {
@@ -14,6 +14,17 @@ const verifyLoginMobileNumber = async (mobileNumber) => {
     }
 };
 
+const addNewUserToDBService = async (userData) => {
+    try {
+        const result = await addNewUserToDB(userData);
+        return true
+    } catch (err) {
+        console.log(err)
+        return false;
+    }
+}
+
 module.exports = {
-    verifyLoginMobileNumber
+    verifyLoginMobileNumber,
+    addNewUserToDBService
 }

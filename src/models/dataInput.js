@@ -22,7 +22,11 @@ const dropTable = `
   DROP table users
 `
 
-db.query(getTables, (err, results) => {
+const getTypeQuery = `
+  SELECT user_id, data_type FROM information_schema.columns WHERE table_name = 'users' AND column_name = 'user_id'
+`;
+
+db.query(getTypeQuery, (err, results) => {
   if (err) {
     console.error('Error creating users table:', err.message);
     return;

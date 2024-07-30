@@ -20,8 +20,23 @@ const getUserByMobileNumber = async (mobileNumber) => {
     } catch (err) {
         throw new Error(err)
     }
+};
+
+const addNewUserToDB = async ({newUserId, name, mobileNumber, email, password}) => {
+    const userQuery = `
+        INSERT INTO users (user_id, name, mobile_number, email_id, password) VALUES ('${newUserId}', '${name}', '${mobileNumber}', '${email}', '${password}')
+    `;
+    
+    try {
+        const result = await query(userQuery);
+        return true && result.rowCount;
+    } catch(err){
+        throw new Error("DB error", err);
+    }
+
 }
 
 module.exports = {
-    getUserByMobileNumber
+    getUserByMobileNumber,
+    addNewUserToDB
 }
