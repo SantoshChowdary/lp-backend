@@ -8,7 +8,7 @@ const getUserByMobileNumber = async (mobileNumber) => {
 
     // need to cover mobileNumber with '', otherwise it'll take it as bigInt
     const userQuery = `
-        SELECT * FROM users WHERE mobile_number = '${mobileNumber}'
+        SELECT * FROM users WHERE mobile_number='${mobileNumber}'
     `;
 
     try {

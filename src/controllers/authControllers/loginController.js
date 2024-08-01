@@ -24,6 +24,7 @@ const loginController = async (req, res) => {
 
 const verifyPasswordController = async (req, res) => {
     const {mobileNumber, password} = req.body;
+    console.log(mobileNumber, password)
 
     try {
         const result = await loginService.verifyLoginMobileNumber(mobileNumber);
@@ -41,7 +42,7 @@ const verifyPasswordController = async (req, res) => {
                 }
                 return res.status(200).json(userData)
             } else {
-                return res.status(401).send()
+                return res.status(401).send("node error")
             }
         }
 

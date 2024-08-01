@@ -16,4 +16,16 @@ body
     "password" : password
 }
 
-3. 
+3. SignUp for a new user
+
+API : http://localhost:3000/auth/v1/signup
+Request type : POST
+Content-Type: application/json
+body
+
+{
+    "name" : "santosh", 
+    "mobileNumber" : "8500808498", 
+    "email" : "ssk28412@gmail.com", 
+    "password" : "12345"
+}
