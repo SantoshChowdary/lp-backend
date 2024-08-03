@@ -11,7 +11,8 @@ module.exports = {
       "fs": false,
       "path": require.resolve("path-browserify"),
       "os": require.resolve("os-browserify/browser"),
-      "util": require.resolve("util/")
+      "util": require.resolve("util/"),
+      "async_hooks": false,
     },
   },
   module: {
