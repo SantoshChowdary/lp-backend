@@ -13,6 +13,8 @@ module.exports = {
       "os": require.resolve("os-browserify/browser"),
       "util": require.resolve("util/"),
       "async_hooks": false,
+      "child_process": false,
+      "npm": false,
     },
   },
   module: {
