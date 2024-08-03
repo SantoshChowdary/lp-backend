@@ -6,6 +6,14 @@ module.exports = {
     filename: 'bundle.js', // Output bundle file
     path: path.resolve(__dirname, 'dist'), // Output directory
   },
+  resolve: {
+    fallback: {
+      "fs": false,
+      "path": require.resolve("path-browserify"),
+      "os": require.resolve("os-browserify/browser"),
+      "util": require.resolve("util/")
+    },
+  },
   module: {
     rules: [
       {
