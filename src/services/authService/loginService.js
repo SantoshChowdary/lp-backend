@@ -5,24 +5,28 @@ const verifyLoginMobileNumber = async (mobileNumber) => {
 
     try {
         const result = await getUserByMobileNumber(mobileNumber);
-        if (result === constants.responseStrings.INVALID_USER){
-            return result
+
+        if (!result) {
+            return { error: true, status: 404, message: constants.responseStrings.INVALID_USER };
         }
-        return result
-    } catch (err){
-        return constants.responseStrings.DATABASE_ERROR;
+        return result;
+    } catch (err) {
+        console.error(err);
+        return { error: true, status: 500, message: constants.responseStrings.DATABASE_ERROR };
     }
 };
 
 const addNewUserToDBService = async (userData) => {
     try {
         const result = await addNewUserToDB(userData);
-        return true
+        return result;
     } catch (err) {
-        console.log(err)
+        console.error(err);
         return false;
     }
-}
+};
+
+
 
 module.exports = {
     verifyLoginMobileNumber,

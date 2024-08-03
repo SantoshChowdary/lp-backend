@@ -7,31 +7,32 @@ const query = promisify(db.query).bind(db);
 const getUserByMobileNumber = async (mobileNumber) => {
 
     // need to cover mobileNumber with '', otherwise it'll take it as bigInt
-    const userQuery = `
-        SELECT * FROM users WHERE mobile_number='${mobileNumber}'
-    `;
+    const userQuery = 'SELECT * FROM users WHERE mobile_number = $1';
 
     try {
-        const results = await query(userQuery);
+        const results = await query(userQuery, [mobileNumber]);
         if (results.rows.length === 0) {
-            return constants.responseStrings.INVALID_USER;
+            return null;
         }
         return results.rows[0];
     } catch (err) {
-        throw new Error(err)
+        console.error(err);
+        throw new Error('Database error');
     }
 };
 
 const addNewUserToDB = async ({newUserId, name, mobileNumber, email, password}) => {
     const userQuery = `
-        INSERT INTO users (user_id, name, mobile_number, email_id, password) VALUES ('${newUserId}', '${name}', '${mobileNumber}', '${email}', '${password}')
+        INSERT INTO users (user_id, name, mobile_number, email_id, password) 
+        VALUES ($1, $2, $3, $4, $5)
     `;
-    
+
     try {
-        const result = await query(userQuery);
-        return true && result.rowCount;
-    } catch(err){
-        throw new Error("DB error", err);
+        const result = await query(userQuery, [newUserId, name, mobileNumber, email, password]);
+        return result.rowCount > 0;
+    } catch (err) {
+        console.error('Database error', err);
+        throw new Error('Database error');
     }
 
 }

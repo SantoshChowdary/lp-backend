@@ -1,4 +1,4 @@
-const db = require('../database/dbConnection');
+const db = require('../../database/dbConnection');
 
 const createUsersTable = `
     CREATE TABLE users (
@@ -26,7 +26,14 @@ const getTypeQuery = `
   SELECT user_id, data_type FROM information_schema.columns WHERE table_name = 'users' AND column_name = 'user_id'
 `;
 
-db.query(getTypeQuery, (err, results) => {
+const changeDataTypeQuery = `
+  ALTER TABLE users
+  ALTER COLUMN password TYPE text
+`
+
+const deleteRowsQuery = `DELETE FROM users`
+
+db.query(changeDataTypeQuery, (err, results) => {
   if (err) {
     console.error('Error creating users table:', err.message);
     return;

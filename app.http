@@ -8,7 +8,7 @@ Content-Type: application/json
 
 {
     "mobileNumber" : "9866021291",
-    "password" : "santosh9491"
+    "password" : "12345"
 }
 
 ###
@@ -18,7 +18,7 @@ Content-Type: application/json
 
 {
     "name" : "santosh", 
-    "mobileNumber" : "8500808498", 
-    "email" : "ssk28412@gmail.com", 
+    "mobileNumber" : "9866021291", 
+    "email" : "ssk28411@gmail.com", 
     "password" : "12345"
 }

@@ -1,83 +1,89 @@
 const loginService = require("../../services/authService/loginService");
+const {generateJWTToken} = require('../../services/authService/tokenService')
 const constants = require("../../common/constants");
 const { v4: uuidV4 } = require('uuid');
+const bcrypt = require('bcrypt');
+require('dotenv/config');
 
 
 const loginController = async (req, res) => {
-    const {mobileNumber} = req.params;
+    const { mobileNumber } = req.params;
 
     try {
         const result = await loginService.verifyLoginMobileNumber(mobileNumber);
 
-        if (result === constants.responseStrings.INVALID_USER){
-            return res.status(404).send(result)
-        } else if (result === constants.responseStrings.DATABASE_ERROR){
-            return res.status(500).send(result)
+        if (result.error) {
+            return res.status(result.status).send(result.message);
         } else {
-            return res.status(200).send(result.user_id);
+            return res.status(200).send(constants.responseStrings.LOGIN_SUCCESS);
         }
-
     } catch (err) {
-        return res.status(500).send(constants.responseStrings.SERVER_ERROR)
+        console.error(err);
+        return res.status(500).send(constants.responseStrings.SERVER_ERROR);
     }
 };
 
 const verifyPasswordController = async (req, res) => {
-    const {mobileNumber, password} = req.body;
-    console.log(mobileNumber, password)
+    const { mobileNumber, password } = req.body;
 
     try {
         const result = await loginService.verifyLoginMobileNumber(mobileNumber);
-        if (result === constants.responseStrings.INVALID_USER){
-            return res.status(404).send(result)
-        } else if (result === constants.responseStrings.DATABASE_ERROR){
-            return res.status(500).send(result)
+
+        if (result.error) {
+            return res.status(result.status).send(result.message);
         } else {
-            if (result.password === password){
+            const isPasswordValid = await bcrypt.compare(password, result.password);
+            const newJwtToken = await generateJWTToken(result.user_id)
+            
+            if (isPasswordValid) {
                 let userData = {
-                    userId : result.user_id,
-                    userName : result.name,
-                    emailId : result.email_id,
-                    mobileNumber : result.mobile_number
-                }
-                return res.status(200).json(userData)
+                    userId: result.user_id,
+                    userName: result.name,
+                    emailId: result.email_id,
+                    mobileNumber: result.mobile_number,
+                    token : newJwtToken,
+                    expiresIn : 100
+                };
+                return res.status(200).json(userData);
             } else {
-                return res.status(401).send("node error")
+                return res.status(401).send(constants.responseStrings.INVALID_PASSWORD);
             }
         }
-
     } catch (err) {
-        return res.status(500).send(constants.responseStrings.SERVER_ERROR)
+        console.error(err);
+        return res.status(500).send(constants.responseStrings.SERVER_ERROR);
     }
 }
 
 const signupController = async (req, res) => {
-    const {name, mobileNumber, email, password} = req.body;
+    const { name, mobileNumber, email, password } = req.body;
 
-    try{
+    try {
         const result = await loginService.verifyLoginMobileNumber(mobileNumber);
-        if (result === constants.responseStrings.INVALID_USER){
+
+        if (result.error && result.status === 404) {
             const newUserId = uuidV4();
+            const hashedPassword = await bcrypt.hash(password, 10);
+
             const isUserAdded = await loginService.addNewUserToDBService({
-                newUserId, name, mobileNumber, email, password
+                newUserId, name, mobileNumber, email, password: hashedPassword
             });
-            if (isUserAdded){
+
+            if (isUserAdded) {
                 return res.status(201).send(newUserId);
             } else {
-                return res.status(500).send(constants.responseStrings.DATABASE_ERROR)
+                return res.status(500).send(constants.responseStrings.DATABASE_ERROR);
             }
-        } else if (result === constants.responseStrings.DATABASE_ERROR){
-            return res.status(500).send(result)
+        } else if (result.error) {
+            return res.status(result.status).send(result.message);
         } else {
             return res.status(400).send(constants.responseStrings.EXISTING_USER);
         }
-
-    } catch (err){
-        console.log(err)
-        return res.status(500).send(constants.responseStrings.SERVER_ERROR)
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send(constants.responseStrings.SERVER_ERROR);
     }
-
-}
+};
 
 
 module.exports = {

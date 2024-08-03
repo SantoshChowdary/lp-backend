@@ -1,5 +1,4 @@
 // HTTP Status codes
-
 const statusCodes = {
     OK: 200,
     CREATED: 201,
@@ -33,6 +32,8 @@ const responseStrings = {
     EXISTING_USER : "EXISTING_USER",
     NO_DATA_AVAILABLE : "NO_DATA_AVAILABLE",
     PROFILE_INCOMPLETE : "PROFILE_INCOMPLETE",
+    INVALID_TOKEN : "INVALID_TOKEN",
+    TOKEN_REQUIRED : "TOKEN_REQUIRED"
 }
 
 module.exports = {

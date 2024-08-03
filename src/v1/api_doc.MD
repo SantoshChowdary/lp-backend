@@ -2,7 +2,7 @@
 
 API : http://localhost:3000/auth/v1/login/9866021291
 Request Type : POST
-Results : User_id if success, USER_NOT_FOUND if invalid user, DB_ERROR or Internal error if error
+Results : LOGIN_SUCCESS if success, USER_NOT_FOUND if invalid user, DB_ERROR or Internal error if error
 
 2. Verify user's password
 
