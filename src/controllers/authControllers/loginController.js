@@ -60,8 +60,10 @@ const signupController = async (req, res) => {
 
     try {
         const result = await loginService.verifyLoginMobileNumber(mobileNumber);
+        const verifyMail = await loginService.getUserByMailService(email);
+        console.log(result, verifyMail)
 
-        if (result.error && result.status === 404) {
+        if (result.error && result.status === 404 && verifyMail.error && verifyMail.status === 404) {
             const newUserId = uuidV4();
             const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -74,10 +76,14 @@ const signupController = async (req, res) => {
             } else {
                 return res.status(500).send(constants.responseStrings.DATABASE_ERROR);
             }
-        } else if (result.error) {
-            return res.status(result.status).send(result.message);
+        } else if (result?.error && result.status !== 404 && verifyMail?.error && verifyMail.status !== 404) {
+            return res.status(400).send(result.message);
+        } else if (result.name && verifyMail.error) {
+            return res.status(400).send(constants.responseStrings.EXISTING_MOBILE_NUMBER);
+        } else if (result.error && verifyMail.name){
+            return res.status(400).send(constants.responseStrings.EXISTING_EMAIL);
         } else {
-            return res.status(400).send(constants.responseStrings.EXISTING_USER);
+            return res.status(400).send(result);
         }
     } catch (err) {
         console.error(err);

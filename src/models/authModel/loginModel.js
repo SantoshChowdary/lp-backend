@@ -21,6 +21,21 @@ const getUserByMobileNumber = async (mobileNumber) => {
     }
 };
 
+const getUserByEmailId = async (email) => {
+    const userQuery = 'SELECT * FROM users WHERE email_id = $1';
+
+    try{
+        const results = await query(userQuery, [email]);
+        if (results.rows.length === 0){
+            return null;
+        };
+        return results.rows[0];
+    } catch (err){
+        console.log(err);
+        throw new Error('Database error')
+    }
+}
+
 const addNewUserToDB = async ({newUserId, name, mobileNumber, email, password}) => {
     const userQuery = `
         INSERT INTO users (user_id, name, mobile_number, email_id, password) 
@@ -39,5 +54,6 @@ const addNewUserToDB = async ({newUserId, name, mobileNumber, email, password}) 
 
 module.exports = {
     getUserByMobileNumber,
-    addNewUserToDB
+    addNewUserToDB,
+    getUserByEmailId
 }
