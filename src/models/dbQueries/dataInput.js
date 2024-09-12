@@ -41,4 +41,4 @@ db.query(changeDataTypeQuery, (err, results) => {
   console.log(results.rows);
 });
 
-db.end();
+// db.end();

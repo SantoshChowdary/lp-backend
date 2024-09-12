@@ -49,8 +49,9 @@ const addNewUserToDB = async ({newUserId, name, mobileNumber, email, password}) 
         console.error('Database error', err);
         throw new Error('Database error');
     }
+};
 
-}
+// db.end();
 
 module.exports = {
     getUserByMobileNumber,
