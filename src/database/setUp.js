@@ -30,12 +30,10 @@ export const setUp = `
         preferred_languages JSON,
         profile_pic_url TEXT,
         user_role VARCHAR(50),
-        FOREIGN KEY (user_id) REFERENCES users(user_id),
-        FOREIGN KEY (email) REFERENCES users(email),
-        FOREIGN KEY (phone_number) REFERENCES users(user_id)
+        FOREIGN KEY (user_id) REFERENCES users(user_id)
     );
 
-    // User Product Details Table
+    // User Product Details Table - Loaded
     CREATE TABLE user_product_details (
         entry_id VARCHAR(50) PRIMARY KEY,
         user_id VARCHAR(50) NOT NULL,
@@ -47,7 +45,7 @@ export const setUp = `
         FOREIGN KEY (product_id) REFERENCES product_details(product_id)
     );
 
-    // User Resource Completion Details Table
+    // User Resource Completion Details Table - Loaded
     CREATE TABLE user_resource_completion_details (
         user_id VARCHAR(50) NOT NULL,
         resource_id VARCHAR(50) NOT NULL,
@@ -60,7 +58,7 @@ export const setUp = `
         FOREIGN KEY (resource_id) REFERENCES resources(resource_id)
     );
 
-    // User Journey Details Table
+    // User Journey Details Table - Loaded
     CREATE TABLE user_journey_details (
         entry_id VARCHAR(50) PRIMARY KEY,
         user_id VARCHAR(50) NOT NULL,
@@ -75,7 +73,7 @@ export const setUp = `
         FOREIGN KEY (journey_id) REFERENCES journey_details(journey_id)
     );
 
-    // Product Details Table
+    // Product Details Table - Loaded
     CREATE TABLE product_details (
         product_id VARCHAR(50) PRIMARY KEY,
         product_code VARCHAR(50) UNIQUE,
@@ -84,7 +82,7 @@ export const setUp = `
         product_discount DECIMAL(5, 2)
     );
 
-    // Product Journey Details Table
+    // Product Journey Details Table - Loaded
     CREATE TABLE product_journey_details (
         entry_id VARCHAR(50) PRIMARY KEY,
         product_id VARCHAR(50) NOT NULL,
@@ -93,12 +91,21 @@ export const setUp = `
         FOREIGN KEY (journey_id) REFERENCES journey_details(journey_id)
     );
 
-    // Journey Details Table
+    // Journey Details Table - Loaded
     CREATE TABLE journey_details (
         journey_id VARCHAR(50) PRIMARY KEY,
         journey_name VARCHAR(200) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
+
+    // Resource Connections table
+    CREATE TABLE resource_connections (
+        resource_id VARCHAR(50) NOT NULL,
+        parent_resource_id VARCHAR(50) NOT NULL,
+        PRIMARY KEY (resource_id, parent_resource_id),
+        FOREIGN KEY (resource_id) REFERENCES resources(resource_id),
+        FOREIGN KEY (parent_resource_id) REFERENCES resources(resource_id)
+    )
 
     // Courses Table
     CREATE TABLE courses (
@@ -112,16 +119,16 @@ export const setUp = `
         FOREIGN KEY (category_id) REFERENCES course_category_details(category_id)
     );
 
-    // Course Category Details Table
+    // Course Category Details Table - Loaded
     CREATE TABLE course_category_details (
         category_id VARCHAR(50) PRIMARY KEY,
         category_enum VARCHAR(50) UNIQUE NOT NULL,
         category_name VARCHAR(200) NOT NULL,
-        order INTEGER,
+        category_order INTEGER,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
-    // Topics Table
+    // Topics Table - Loaded
     CREATE TABLE topics (
         topic_id VARCHAR(50) PRIMARY KEY,
         topic_name VARCHAR(200) NOT NULL,
@@ -129,7 +136,7 @@ export const setUp = `
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
-    // Units Table
+    // Units Table - Loaded
     CREATE TABLE units (
         unit_id VARCHAR(50) PRIMARY KEY,
         unit_name VARCHAR(200) NOT NULL,
@@ -138,13 +145,14 @@ export const setUp = `
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
 
-    // Resources Table
+    // Resources Table - Loaded
     CREATE TABLE resources (
         resource_id VARCHAR(50) PRIMARY KEY,
-        resource_type ENUM('COURSE', 'TOPIC', 'UNIT')
+        resource_order int,
+        resource_type varchar(50)
     );
 
-    // Resource Availability Plans Table
+    // Resource Availability Plans Table - Loaded
     CREATE TABLE resource_availability_plans (
         resource_id VARCHAR(50) NOT NULL,
         product_id VARCHAR(50) NOT NULL,
@@ -153,13 +161,15 @@ export const setUp = `
         FOREIGN KEY (product_id) REFERENCES product_details(product_id)
     );
 
-    // Resource Configs Table
+    // Resource Configs Table - Loaded
     CREATE TABLE resource_configs (
         resource_id VARCHAR(50) NOT NULL,
         default_unlock BOOLEAN,
         PRIMARY KEY (resource_id),
         FOREIGN KEY (resource_id) REFERENCES resources(resource_id)
     );
+
+    // check below carefully.
 
     // Learning Video Details Table
     CREATE TABLE learning_video_details (

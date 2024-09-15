@@ -1,8 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv/config');
-const authRouterV1 = require('./src/v1/routers/auth');
-const userRouterV1 = require('./src/v1/routers/userRouters')
+const authRouterV1 = require('./src/auth/routers/authRouterV1');
+const userRouterV1 = require('./src/users/routers/userRoutersV1')
 
 const app = express();
 
