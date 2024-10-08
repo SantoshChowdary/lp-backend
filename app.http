@@ -26,3 +26,17 @@ Content-Type: application/json
 ###
 
 POST http://localhost:3000/api/menu-options?plan=:enrollPlan
+
+
+###
+
+POST http://localhost:3000/api/edit-profile
+Content-Type: application/json
+
+{
+    "first_name" : "santosh",
+    "last_name" : "kumar",
+    "email" : "ssk2841@gmail.com",
+    "mobile_number" : "9866021291",
+    
+}
