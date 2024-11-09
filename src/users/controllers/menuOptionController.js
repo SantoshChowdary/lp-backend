@@ -20,9 +20,9 @@ const tabsData = [
     {
       tabId: v4(),
       enrollPlans: [],
-      slug: "/other-courses",
+      slug: "/all-courses",
       tabOrder: 3,
-      tabName: "Other Courses"
+      tabName: "All Courses"
     },
     {
       tabId: v4(),
@@ -41,17 +41,17 @@ const tabsData = [
     {
       tabId: v4(),
       enrollPlans: [],
-      slug: "/community",
+      slug: "/my-learnings",
       tabOrder: 6,
-      tabName: "community"
+      tabName: "My Learnings"
     },
-    // {
-    //   tabId: v4(),
-    //   enrollPlans: [],
-    //   slug: "/jobs",
-    //   tabOrder: 7,
-    //   tabName: "Jobs"
-    // },
+    {
+      tabId: v4(),
+      enrollPlans: [],
+      slug: "/my-portfolio",
+      tabOrder: 7,
+      tabName: "My Portfolio"
+    },
     // {
     //   tabId: v4(),
     //   enrollPlans: [],
